@@ -20,9 +20,7 @@ export const AulasPage = () => {
   
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Carregar dados de módulos e aulas
   useEffect(() => {
-    // Módulos
     const savedModulos = localStorage.getItem("sg_modulos");
     let availableModulos: IModulo[] = [];
     if (savedModulos) {
@@ -30,7 +28,6 @@ export const AulasPage = () => {
       setModulos(availableModulos);
     }
 
-    // Aulas
     const savedAulas = localStorage.getItem("sg_aulas");
     if (savedAulas) {
       setAulas(JSON.parse(savedAulas));
@@ -56,7 +53,6 @@ export const AulasPage = () => {
     }
   }, []);
 
-  // Selecionar módulo padrão quando a lista de módulos carregar
   useEffect(() => {
     if (modulos.length > 0 && !moduloId) {
       setModuloId(modulos[0].id);

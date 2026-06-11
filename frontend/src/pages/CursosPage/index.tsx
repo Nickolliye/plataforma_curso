@@ -7,7 +7,7 @@ interface ICategory {
   descricao: string;
 }
 
-interface ICourse {
+export interface ICurso {
   id: string;
   titulo: string;
   descricao: string;
@@ -17,7 +17,10 @@ interface ICourse {
   dataPublicacao: string;
   totalAulas: number;
   totalHoras: number;
+  nome?: string;
 }
+
+export type ICourse = ICurso;
 
 interface IModule {
   id: string;
@@ -76,12 +79,10 @@ export const CursosPage = () => {
   const [lOrdem, setLOrdem] = useState(1);
   const [showLessonForm, setShowLessonForm] = useState(false);
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const loadInitialData = async () => {
     try {
-      setLoading(true);
       const [cData, catData, uData] = await Promise.all([
         apiService.getAll<ICourse>("cursos"),
         apiService.getAll<ICategory>("categorias"),
@@ -97,8 +98,6 @@ export const CursosPage = () => {
     } catch (err: any) {
       console.error("Erro ao carregar dados:", err);
       setError("Erro ao se conectar ao JSON Server.");
-    } finally {
-      setLoading(false);
     }
   };
 

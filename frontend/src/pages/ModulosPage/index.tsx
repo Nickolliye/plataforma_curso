@@ -18,9 +18,7 @@ export const ModulosPage = () => {
   
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Carregar dados de cursos e módulos
   useEffect(() => {
-    // Cursos
     const savedCursos = localStorage.getItem("sg_cursos");
     let availableCursos: ICurso[] = [];
     if (savedCursos) {
@@ -28,7 +26,6 @@ export const ModulosPage = () => {
       setCursos(availableCursos);
     }
 
-    // Módulos
     const savedModulos = localStorage.getItem("sg_modulos");
     if (savedModulos) {
       setModulos(JSON.parse(savedModulos));
@@ -52,7 +49,6 @@ export const ModulosPage = () => {
     }
   }, []);
 
-  // Selecionar curso padrão quando a lista de cursos carregar
   useEffect(() => {
     if (cursos.length > 0 && !cursoId) {
       setCursoId(cursos[0].id);
@@ -112,7 +108,7 @@ export const ModulosPage = () => {
 
   const getCursoNome = (id: string) => {
     const c = cursos.find((c) => c.id === id);
-    return c ? c.nome : "Sem Curso";
+    return c ? (c.titulo || c.nome || "Sem Curso") : "Sem Curso";
   };
 
   return (
@@ -141,7 +137,7 @@ export const ModulosPage = () => {
                     ) : (
                       cursos.map((curso) => (
                         <option key={curso.id} value={curso.id}>
-                          {curso.nome}
+                          {curso.titulo || curso.nome}
                         </option>
                       ))
                     )}

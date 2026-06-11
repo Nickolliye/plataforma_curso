@@ -53,7 +53,6 @@ export const MatriculasPage = () => {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedCourseId, setSelectedCourseId] = useState("");
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const [evalNota, setEvalNota] = useState(5);
@@ -62,7 +61,6 @@ export const MatriculasPage = () => {
 
   const loadData = async () => {
     try {
-      setLoading(true);
       const [uData, cData, mData] = await Promise.all([
         apiService.getAll<IUser>("usuarios"),
         apiService.getAll<ICourse>("cursos"),
@@ -78,8 +76,6 @@ export const MatriculasPage = () => {
     } catch (err) {
       console.error(err);
       setError("Erro ao se conectar ao banco local.");
-    } finally {
-      setLoading(false);
     }
   };
 

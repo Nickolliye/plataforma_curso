@@ -7,6 +7,7 @@ interface UsuarioFormProps {
     key?: string;
     usuario: IUsuario | null;
     onSave: (usuario: IUsuario) => void;
+    onCancel: () => void;
     errors?: Record<string, string>;
 }
 

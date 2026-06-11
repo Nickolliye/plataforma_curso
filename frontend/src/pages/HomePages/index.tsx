@@ -8,7 +8,6 @@ export const HomePages = () => {
   const [alunosCount, setAlunosCount] = useState(0);
 
   useEffect(() => {
-    // Carregar contadores
     const trilhas = localStorage.getItem("sg_trilhas");
     if (trilhas) {
       setTrilhasCount(JSON.parse(trilhas).length);
@@ -36,7 +35,6 @@ export const HomePages = () => {
 
   return (
     <div className="animate-fade-in">
-      {/* Welcome Banner */}
       <div className="p-5 mb-4 bg-white rounded-3 shadow-sm border border-light">
         <div className="container-fluid py-2">
           <h1 className="display-5 fw-bold text-primary">Painel de Aprendizado</h1>
@@ -50,7 +48,6 @@ export const HomePages = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
       <div className="row g-4 mb-5">
         <div className="col-12 col-sm-6 col-xl-4">
           <div className="card shadow-sm border-0 h-100">
@@ -95,7 +92,6 @@ export const HomePages = () => {
         </div>
       </div>
 
-      {/* Features Section */}
       <div className="row">
         <div className="col-12 col-lg-4 mb-4">
           <div className="card shadow-sm bg-gradient bg-primary text-white h-100 border-0">

@@ -6,6 +6,7 @@ export interface IUsuario {
     email: string;
     senha: string;
     status: 'ativo' | 'inativo';
+    dataCadastro?: string;
 }
 
 export const usuarioSchema = z.object({

@@ -4,6 +4,7 @@ import type { IUsuario } from "../../../models/usuario.model";
 interface UsuarioTableProps {
     usuarios: IUsuario[];
     onEdit: (usuario: IUsuario) => void;
+    onDelete: (usuarioId: string) => void;
     usuarioEmEdicao: IUsuario | null;
 }
 
