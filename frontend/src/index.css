@@ -1,0 +1,234 @@
+:root {
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --dark-sidebar: #1e1e2d;
+  --dark-sidebar-hover: #2b2b40;
+  --dark-sidebar-active: #3699ff;
+  --light-bg: #f5f8fa;
+  --border-color: #eff2f5;
+  --text-muted: #b5b5c3;
+  --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--light-bg);
+  color: #181c32;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.app-sidebar {
+  width: 260px;
+  background-color: var(--dark-sidebar);
+  color: #ffffff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar.collapsed {
+  left: -260px;
+}
+
+.sidebar-header {
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.sidebar-close-btn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 1.5rem 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  margin-bottom: 0.25rem;
+  padding: 0 1rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #a2a5b9;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-link:hover {
+  color: #ffffff;
+  background-color: var(--dark-sidebar-hover);
+}
+
+.sidebar-link.active {
+  color: #ffffff;
+  background-color: rgba(13, 110, 253, 0.15);
+  border-left: 4px solid var(--dark-sidebar-active);
+}
+
+.app-container {
+  margin-left: 260px;
+  min-height: 100vh;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container.full-width {
+  margin-left: 0;
+}
+
+.app-header {
+  height: 65px;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.main-content {
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+.sg-cursos-header {
+  border-bottom: 2px solid #198754;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sg-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.sg-tab-link {
+  color: #0d6efd;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 1.05rem;
+}
+
+.sg-tab-link:hover {
+  background-color: rgba(13, 110, 253, 0.08);
+}
+
+.sg-tab-link.active {
+  background-color: #0d6efd;
+  color: #ffffff !important;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px 0 rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
