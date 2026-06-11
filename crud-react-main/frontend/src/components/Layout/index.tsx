@@ -6,14 +6,12 @@ export const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
 
-  // Fechar sidebar automaticamente em dispositivos móveis quando mudar de rota
   useEffect(() => {
     if (window.innerWidth < 992) {
       setIsSidebarOpen(false);
     }
   }, [location.pathname]);
 
-  // Lidar com o redimensionamento da janela
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 992) {
@@ -24,7 +22,6 @@ export const Layout = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    // Definir estado inicial correto
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
@@ -51,13 +48,6 @@ export const Layout = () => {
           >
             <i className="bi bi-list"></i>
           </button>
-          
-          <div className="d-flex align-items-center gap-3">
-            <span className="text-muted d-none d-sm-inline">Versão Estudante</span>
-            <div className="bg-light rounded-circle p-2 d-flex align-items-center justify-content-center" style={{ width: "40px", height: "40px" }}>
-              <i className="bi bi-person-circle text-primary fs-5"></i>
-            </div>
-          </div>
         </header>
 
         <main className="main-content">

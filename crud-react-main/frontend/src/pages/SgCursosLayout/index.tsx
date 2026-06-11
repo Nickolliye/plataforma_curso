@@ -1,70 +1,40 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 export const SgCursosLayout = () => {
+  const location = useLocation();
+
+  const getHeaderTitle = (pathname: string) => {
+    const path = pathname === "/" ? "/dashboard" : pathname;
+    
+    switch (path) {
+      case "/dashboard":
+        return "Dashboard";
+      case "/usuarios":
+        return "Usuários";
+      case "/cursos":
+        return "Cursos";
+      case "/trilhas":
+        return "Trilhas";
+      case "/matriculas":
+        return "Matrículas";
+      case "/planos":
+        return "Planos";
+      case "/pagamentos":
+        return "Pagamentos";
+      case "/certificados":
+        return "Certificados";
+      default:
+        return "DevTech";
+    }
+  };
+
+  const title = getHeaderTitle(location.pathname);
+
   return (
     <div>
-      <div className="sg-cursos-header">
-        <h2 className="fw-bold mb-0">SG Cursos</h2>
+      <div className="sg-cursos-header" style={{ borderBottom: "2px solid #198754", paddingBottom: "10px", marginBottom: "1.5rem" }}>
+        <h2 className="fw-bold mb-0 text-dark">{title}</h2>
       </div>
-
-      <ul className="sg-tabs">
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/trilhas"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Trilhas
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/cursos"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Cursos
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/modulos"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Módulos
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/aulas"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Aulas
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/usuarios"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Usuários
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/assinaturas"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Assinaturas
-          </NavLink>
-        </li>
-        <li className="sg-tab-item">
-          <NavLink
-            to="/sgcursos/certificados"
-            className={({ isActive }) => `sg-tab-link ${isActive ? "active" : ""}`}
-          >
-            Certificados
-          </NavLink>
-        </li>
-      </ul>
 
       <div className="mt-4 animate-fade-in">
         <Outlet />
@@ -72,3 +42,4 @@ export const SgCursosLayout = () => {
     </div>
   );
 };
+export default SgCursosLayout;

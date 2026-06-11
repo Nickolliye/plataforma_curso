@@ -11,7 +11,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       <div className="sidebar-header">
         <NavLink to="/" className="sidebar-brand" onClick={onClose}>
           <i className="bi bi-mortarboard-fill text-primary"></i>
-          <span>DevTech.EDU</span>
+          <span>DevTech</span>
         </NavLink>
         <button
           className="sidebar-close-btn d-lg-none"
@@ -27,25 +27,81 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           <NavLink
             to="/"
             end
-            className={({ isActive }) =>
-              `sidebar-link ${isActive ? "active" : ""}`
-            }
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
             onClick={onClose}
           >
-            <i className="bi bi-house-door-fill"></i>
-            <span>Home</span>
+            <i className="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
           </NavLink>
         </li>
         <li className="sidebar-item">
           <NavLink
-            to="/sgcursos"
-            className={({ isActive }) =>
-              `sidebar-link ${isActive || window.location.pathname.startsWith("/sgcursos") ? "active" : ""}`
-            }
+            to="/usuarios"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
             onClick={onClose}
           >
-            <i className="bi bi-journal-bookmark-fill"></i>
-            <span>SG Cursos</span>
+            <i className="bi bi-people-fill"></i>
+            <span>Usuários</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/cursos"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-book-half"></i>
+            <span>Cursos</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/trilhas"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-diagram-3-fill"></i>
+            <span>Trilhas</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/matriculas"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-journal-check"></i>
+            <span>Matrículas</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/planos"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-tags-fill"></i>
+            <span>Planos</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/pagamentos"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-credit-card-2-front-fill"></i>
+            <span>Pagamentos</span>
+          </NavLink>
+        </li>
+        <li className="sidebar-item">
+          <NavLink
+            to="/certificados"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            onClick={onClose}
+          >
+            <i className="bi bi-award-fill"></i>
+            <span>Certificados</span>
           </NavLink>
         </li>
       </ul>

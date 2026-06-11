@@ -1,19 +1,285 @@
 {
   "usuarios": [
     {
+      "id": "u1",
       "nome": "MONICA J. SILVA",
       "email": "monica@gmail.com",
       "senha": "123456",
-      "status": "inativo",
-      "id": "137c"
+      "status": "ativo",
+      "dataCadastro": "2026-05-01"
     },
     {
-      "nome": "MIGULE C. ",
-      "email": "miguel@gmail.com",
-      "senha": "dandan",
-      "status": "inativo",
-      "id": "0f1d"
+      "id": "u3",
+      "nome": "PROF. DANIEL S.",
+      "email": "daniel@devtech.edu",
+      "senha": "password123",
+      "status": "ativo",
+      "dataCadastro": "2026-01-01"
     },
-  
+    {
+      "id": "u2236",
+      "nome": "Nicole",
+      "email": "nicole@email.com",
+      "senha": "123456",
+      "status": "inativo",
+      "dataCadastro": "2026-06-11"
+    }
+  ],
+  "categorias": [
+    {
+      "id": "cat1",
+      "nome": "Front-End",
+      "descricao": "Desenvolvimento de interfaces web com HTML, CSS e JavaScript/React."
+    },
+    {
+      "id": "cat2",
+      "nome": "Back-End",
+      "descricao": "Desenvolvimento de APIs e lógica de servidor com Node.js, Express e SQL."
+    }
+  ],
+  "cursos": [
+    {
+      "id": "cur1",
+      "titulo": "Curso React",
+      "descricao": "Aprenda React do básico ao avançado com hooks, rotas e estado global.",
+      "idInstrutor": "u3",
+      "idCategoria": "cat1",
+      "nivel": "Iniciante",
+      "dataPublicacao": "2026-05-20",
+      "totalAulas": 5,
+      "totalHoras": 20
+    },
+    {
+      "id": "cur2",
+      "titulo": "Curso Node.js",
+      "descricao": "Construa APIs RESTful escaláveis com Node.js e Express.",
+      "idInstrutor": "u3",
+      "idCategoria": "cat2",
+      "nivel": "Intermediário",
+      "dataPublicacao": "2026-06-01",
+      "totalAulas": 4,
+      "totalHoras": 15
+    }
+  ],
+  "modulos": [
+    {
+      "id": "mod1",
+      "idCurso": "cur1",
+      "titulo": "Módulo 1: Introdução",
+      "ordem": 1
+    },
+    {
+      "id": "mod2",
+      "idCurso": "cur1",
+      "titulo": "Módulo 2: State & Effects",
+      "ordem": 2
+    },
+    {
+      "id": "mod3",
+      "idCurso": "cur2",
+      "titulo": "Módulo 1: Fundamentos Express",
+      "ordem": 1
+    },
+    {
+      "id": "mod9154",
+      "idCurso": "cur1",
+      "titulo": "Módulo 3",
+      "ordem": 3
+    }
+  ],
+  "aulas": [
+    {
+      "id": "aul1",
+      "idModulo": "mod1",
+      "titulo": "Aula 1: O que é React?",
+      "tipoConteudo": "Vídeo",
+      "urlConteudo": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "duracaoMinutos": 10,
+      "ordem": 1
+    },
+    {
+      "id": "aul2",
+      "idModulo": "mod1",
+      "titulo": "Aula 2: Primeiro Componente",
+      "tipoConteudo": "Vídeo",
+      "urlConteudo": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "duracaoMinutos": 15,
+      "ordem": 2
+    },
+    {
+      "id": "aul3",
+      "idModulo": "mod2",
+      "titulo": "Aula 1: Usando useState",
+      "tipoConteudo": "Texto",
+      "urlConteudo": "Material de leitura sobre hooks de estado.",
+      "duracaoMinutos": 20,
+      "ordem": 1
+    },
+    {
+      "id": "aul4",
+      "idModulo": "mod2",
+      "titulo": "Aula 2: Usando useEffect",
+      "tipoConteudo": "Vídeo",
+      "urlConteudo": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "duracaoMinutos": 25,
+      "ordem": 2
+    },
+    {
+      "id": "aul5",
+      "idModulo": "mod3",
+      "titulo": "Aula 1: Criando Rotas",
+      "tipoConteudo": "Vídeo",
+      "urlConteudo": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "duracaoMinutos": 15,
+      "ordem": 1
+    }
+  ],
+  "matriculas": [
+    {
+      "id": "mat1",
+      "idUsuario": "u1",
+      "idCurso": "cur1",
+      "dataMatricula": "2026-06-05",
+      "dataConclusao": null
+    },
+    {
+      "id": "mat7962",
+      "idUsuario": "u1",
+      "idCurso": "cur2",
+      "dataMatricula": "2026-06-11",
+      "dataConclusao": "2026-06-11"
+    }
+  ],
+  "progresso_aulas": [
+    {
+      "id": "prog1",
+      "idUsuario": "u1",
+      "idAula": "aul1",
+      "dataConclusao": "2026-06-06",
+      "status": "Concluído"
+    },
+    {
+      "id": "prog2",
+      "idUsuario": "u1",
+      "idAula": "aul2",
+      "dataConclusao": "2026-06-07",
+      "status": "Concluído"
+    },
+    {
+      "id": "prog4657",
+      "idUsuario": "u1",
+      "idAula": "aul5",
+      "dataConclusao": "2026-06-11",
+      "status": "Concluído"
+    }
+  ],
+  "avaliacoes": [
+    {
+      "id": "av1",
+      "idUsuario": "u1",
+      "idCurso": "cur1",
+      "nota": 5,
+      "comentario": "Excelente curso para começar com React!",
+      "dataAvaliacao": "2026-06-08"
+    },
+    {
+      "id": "av9733",
+      "idUsuario": "u1",
+      "idCurso": "cur2",
+      "nota": 4,
+      "comentario": "",
+      "dataAvaliacao": "2026-06-11"
+    }
+  ],
+  "trilhas": [
+    {
+      "id": "tri1",
+      "titulo": "Trilha Front-End",
+      "descricao": "Caminho ideal para quem quer aprender a criar interfaces modernas e interativas.",
+      "idCategoria": "cat1"
+    }
+  ],
+  "trilhas_cursos": [
+    {
+      "id": "tc1",
+      "idTrilha": "tri1",
+      "idCurso": "cur1",
+      "ordem": 1
+    }
+  ],
+  "certificados": [
+    {
+      "id": "cer1",
+      "idUsuario": "u1",
+      "idCurso": "cur2",
+      "idTrilha": null,
+      "codigoVerificacao": "CERT-NODE-123",
+      "dataEmissao": "2026-06-09"
+    }
+  ],
+  "planos": [
+    {
+      "id": "pl1",
+      "nome": "Mensal",
+      "descricao": "Acesso a todos os cursos com cobrança recorrente mensal.",
+      "preco": 49.9,
+      "duracaoMeses": 1
+    },
+    {
+      "id": "pl2",
+      "nome": "Anual",
+      "descricao": "Acesso a todos os cursos com desconto especial para pagamento anual.",
+      "preco": 399.9,
+      "duracaoMeses": 12
+    }
+  ],
+  "assinaturas": [
+    {
+      "id": "ass1",
+      "idUsuario": "u1",
+      "idPlano": "pl1",
+      "dataInicio": "2026-06-01",
+      "dataFim": "2026-07-01"
+    },
+    {
+      "id": "ass8703",
+      "idUsuario": "u1",
+      "idPlano": "pl1",
+      "dataInicio": "2026-06-11",
+      "dataFim": "2026-07-11"
+    },
+    {
+      "id": "ass5445",
+      "idUsuario": "u1",
+      "idPlano": "pl2",
+      "dataInicio": "2026-06-11",
+      "dataFim": "2027-06-11"
+    }
+  ],
+  "pagamentos": [
+    {
+      "id": "pag1",
+      "idAssinatura": "ass1",
+      "valorPago": 49.9,
+      "dataPagamento": "2026-06-01",
+      "metodoPagamento": "Cartão de Crédito",
+      "idTransacaoGateway": "TX-998822"
+    },
+    {
+      "id": "pag7278",
+      "idAssinatura": "ass8703",
+      "valorPago": 49.9,
+      "dataPagamento": "2026-06-11",
+      "metodoPagamento": "Boleto Bancário",
+      "idTransacaoGateway": "TX-492709"
+    },
+    {
+      "id": "pag1943",
+      "idAssinatura": "ass5445",
+      "valorPago": 399.9,
+      "dataPagamento": "2026-06-11",
+      "metodoPagamento": "Boleto Bancário",
+      "idTransacaoGateway": "TX-884490"
+    }
   ]
 }

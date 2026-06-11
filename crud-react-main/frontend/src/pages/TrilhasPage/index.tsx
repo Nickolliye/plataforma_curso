@@ -1,121 +1,249 @@
 import { useState, useEffect } from "react";
+import apiService from "../../services/api.service";
 
-export interface ITrilha {
+interface ICategory {
   id: string;
   nome: string;
+}
+
+interface ICourse {
+  id: string;
+  titulo: string;
+}
+
+interface ITrilha {
+  id: string;
+  titulo: string;
   descricao: string;
+  idCategoria: string;
+}
+
+interface ITrilhaCurso {
+  id: string;
+  idTrilha: string;
+  idCurso: string;
+  ordem: number;
 }
 
 export const TrilhasPage = () => {
   const [trilhas, setTrilhas] = useState<ITrilha[]>([]);
-  const [nome, setNome] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [selectedTrilha, setSelectedTrilha] = useState<ITrilha | null>(null);
+  
+  const [trilhaCursos, setTrilhaCursos] = useState<ITrilhaCurso[]>([]);
 
-  // Carregar dados iniciais ou do localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("sg_trilhas");
-    if (saved) {
-      setTrilhas(JSON.parse(saved));
-    } else {
-      const defaultTrilhas = [
-        { id: "1", nome: "Desenvolvimento Fullstack", descricao: "Formação completa de frontend e backend" },
-        { id: "2", nome: "Ciência de Dados", descricao: "Análise de dados, Machine Learning e IA" }
-      ];
-      setTrilhas(defaultTrilhas);
-      localStorage.setItem("sg_trilhas", JSON.stringify(defaultTrilhas));
+  const [tId, setTId] = useState("");
+  const [tTitulo, setTTitulo] = useState("");
+  const [tDescricao, setTDescricao] = useState("");
+  const [tIdCategoria, setTIdCategoria] = useState("");
+
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const [tcOrdem, setTcOrdem] = useState(1);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const [tData, catData, cData] = await Promise.all([
+        apiService.getAll<ITrilha>("trilhas"),
+        apiService.getAll<ICategory>("categorias"),
+        apiService.getAll<ICourse>("cursos"),
+      ]);
+      setTrilhas(tData);
+      setCategories(catData);
+      setCourses(cData);
+
+      if (tData.length > 0 && !selectedTrilha) {
+        handleSelectTrilha(tData[0]);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao carregar dados do banco.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
-  const saveToLocalStorage = (data: ITrilha[]) => {
-    setTrilhas(data);
-    localStorage.setItem("sg_trilhas", JSON.stringify(data));
+  const handleSelectTrilha = async (trilha: ITrilha) => {
+    setSelectedTrilha(trilha);
+    try {
+      const allTc = await apiService.getAll<ITrilhaCurso>("trilhas_cursos");
+      setTrilhaCursos(allTc.filter((tc) => tc.idTrilha === trilha.id).sort((a, b) => a.ordem - b.ordem));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSaveTrilha = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nome.trim() || !descricao.trim()) return;
+    if (!tTitulo || !tIdCategoria) return;
 
-    if (editingId) {
-      const updated = trilhas.map((t) =>
-        t.id === editingId ? { ...t, nome, descricao } : t
-      );
-      saveToLocalStorage(updated);
-      setEditingId(null);
-    } else {
-      const newTrilha: ITrilha = {
-        id: Math.random().toString(36).substr(2, 9),
-        nome,
-        descricao,
-      };
-      saveToLocalStorage([...trilhas, newTrilha]);
-    }
+    const data = {
+      titulo: tTitulo,
+      descricao: tDescricao,
+      idCategoria: tIdCategoria,
+    };
 
-    setNome("");
-    setDescricao("");
-  };
-
-  const handleEdit = (trilha: ITrilha) => {
-    setEditingId(trilha.id);
-    setNome(trilha.nome);
-    setDescricao(trilha.descricao);
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm("Tem certeza que deseja excluir esta trilha?")) {
-      const filtered = trilhas.filter((t) => t.id !== id);
-      saveToLocalStorage(filtered);
+    try {
+      if (tId) {
+        const updated = await apiService.update<ITrilha>("trilhas", tId, { ...data, id: tId });
+        setTrilhas((prev) => prev.map((t) => (t.id === tId ? updated : t)));
+        if (selectedTrilha?.id === tId) {
+          setSelectedTrilha(updated);
+        }
+      } else {
+        const created = await apiService.create<ITrilha>("trilhas", {
+          ...data,
+          id: "tri" + Math.floor(1000 + Math.random() * 9000),
+        });
+        setTrilhas((prev) => [...prev, created]);
+        handleSelectTrilha(created);
+      }
+      handleCancelTrilha();
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleCancel = () => {
-    setEditingId(null);
-    setNome("");
-    setDescricao("");
+  const handleEditTrilha = (trilha: ITrilha) => {
+    setTId(trilha.id);
+    setTTitulo(trilha.titulo);
+    setTDescricao(trilha.descricao);
+    setTIdCategoria(trilha.idCategoria);
+  };
+
+  const handleDeleteTrilha = async (id: string) => {
+    if (!confirm("Tem certeza que deseja excluir esta trilha?")) return;
+    try {
+      await apiService.delete("trilhas", id);
+      setTrilhas((prev) => prev.filter((t) => t.id !== id));
+      if (selectedTrilha?.id === id) {
+        setSelectedTrilha(null);
+        setTrilhaCursos([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCancelTrilha = () => {
+    setTId("");
+    setTTitulo("");
+    setTDescricao("");
+    setTIdCategoria("");
+  };
+
+  const handleLinkCourse = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedTrilha || !selectedCourseId) return;
+
+    if (trilhaCursos.some((tc) => tc.idCurso === selectedCourseId)) {
+      alert("Este curso já está associado a esta trilha.");
+      return;
+    }
+
+    try {
+      const created = await apiService.create<ITrilhaCurso>("trilhas_cursos", {
+        id: "tc" + Math.floor(1000 + Math.random() * 9000),
+        idTrilha: selectedTrilha.id,
+        idCurso: selectedCourseId,
+        ordem: Number(tcOrdem),
+      });
+      setTrilhaCursos((prev) => [...prev, created].sort((a, b) => a.ordem - b.ordem));
+      setSelectedCourseId("");
+      setTcOrdem(trilhaCursos.length + 2);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleUnlinkCourse = async (id: string) => {
+    if (!confirm("Remover este curso da trilha?")) return;
+    try {
+      await apiService.delete("trilhas_cursos", id);
+      setTrilhaCursos((prev) => prev.filter((tc) => tc.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getCourseName = (id: string) => {
+    return courses.find((c) => c.id === id)?.titulo || "Curso Indisponível";
+  };
+
+  const getCategoryName = (id: string) => {
+    return categories.find((c) => c.id === id)?.nome || "Sem Categoria";
   };
 
   return (
     <div>
+      {error && (
+        <div className="alert alert-danger shadow-sm border-0 mb-4">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          {error}
+        </div>
+      )}
+
       <div className="row">
-        <div className="col-12 col-md-5">
-          <div className="card shadow mb-4">
+        <div className="col-12 col-md-5 mb-4">
+          <div className="card shadow-sm border-0">
             <div className="card-header bg-white py-3">
               <h5 className="mb-0 fw-bold text-primary">
-                {editingId ? "Editar Trilha" : "Nova Trilha"}
+                {tId ? "Editar Trilha" : "Criar Trilha"}
               </h5>
             </div>
             <div className="card-body">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSaveTrilha}>
                 <div className="mb-3">
-                  <label htmlFor="nome" className="form-label fw-semibold">Nome da Trilha</label>
+                  <label className="form-label fw-semibold">Título da Trilha</label>
                   <input
                     type="text"
-                    id="nome"
                     className="form-control"
-                    placeholder="Ex: Desenvolvimento Web"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Ex: Trilha Front-End"
+                    value={tTitulo}
+                    onChange={(e) => setTTitulo(e.target.value)}
                     required
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="descricao" className="form-label fw-semibold">Descrição</label>
+                  <label className="form-label fw-semibold">Descrição</label>
                   <textarea
-                    id="descricao"
                     className="form-control"
                     rows={3}
-                    placeholder="Descreva os objetivos desta trilha..."
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
+                    placeholder="Descreva o objetivo desta trilha..."
+                    value={tDescricao}
+                    onChange={(e) => setTDescricao(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">Categoria Principal</label>
+                  <select
+                    className="form-select"
+                    value={tIdCategoria}
+                    onChange={(e) => setTIdCategoria(e.target.value)}
                     required
-                  ></textarea>
+                  >
+                    <option value="">Selecione a categoria...</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.nome}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="d-flex gap-2">
                   <button type="submit" className="btn btn-primary px-4">
-                    {editingId ? "Atualizar" : "Salvar"}
+                    {tId ? "Atualizar" : "Salvar"}
                   </button>
-                  {editingId && (
-                    <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+                  {tId && (
+                    <button type="button" className="btn btn-secondary" onClick={handleCancelTrilha}>
                       Cancelar
                     </button>
                   )}
@@ -125,61 +253,153 @@ export const TrilhasPage = () => {
           </div>
         </div>
 
-        <div className="col-12 col-md-7">
-          <div className="card shadow">
+        <div className="col-12 col-md-7 mb-4">
+          <div className="card shadow-sm border-0">
             <div className="card-header bg-white py-3">
-              <h5 className="mb-0 fw-bold text-dark">Trilhas Disponíveis</h5>
+              <h5 className="mb-0 fw-bold text-dark">Trilhas de Aprendizado</h5>
             </div>
             <div className="card-body p-0">
-              <div className="table-responsive">
-                <table className="table table-striped table-hover mb-0 align-middle">
-                  <thead className="table-light">
-                    <tr>
-                      <th className="px-4">Nome</th>
-                      <th>Descrição</th>
-                      <th className="text-end px-4">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {trilhas.length === 0 ? (
+              {loading && trilhas.length === 0 ? (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary"></div>
+                </div>
+              ) : (
+                <div className="table-responsive">
+                  <table className="table table-striped table-hover mb-0 align-middle">
+                    <thead className="table-light">
                       <tr>
-                        <td colSpan={3} className="text-center py-4 text-muted">
-                          Nenhuma trilha cadastrada.
-                        </td>
+                        <th className="px-4">Trilha</th>
+                        <th>Categoria</th>
+                        <th className="text-end px-4">Ações</th>
                       </tr>
-                    ) : (
-                      trilhas.map((trilha) => (
-                        <tr key={trilha.id}>
-                          <td className="px-4 fw-semibold text-primary">{trilha.nome}</td>
-                          <td className="text-truncate" style={{ maxWidth: "250px" }}>
-                            {trilha.descricao}
+                    </thead>
+                    <tbody>
+                      {trilhas.map((trilha) => (
+                        <tr
+                          key={trilha.id}
+                          onClick={() => handleSelectTrilha(trilha)}
+                          style={{ cursor: "pointer" }}
+                          className={selectedTrilha?.id === trilha.id ? "table-primary" : ""}
+                        >
+                          <td className="px-4">
+                            <div className="fw-semibold text-primary">{trilha.titulo}</div>
+                            <small className="text-muted d-block text-truncate" style={{ maxWidth: "200px" }}>
+                              {trilha.descricao}
+                            </small>
                           </td>
-                          <td className="text-end px-4">
+                          <td>
+                            <span className="badge bg-secondary">{getCategoryName(trilha.idCategoria)}</span>
+                          </td>
+                          <td className="text-end px-4" onClick={(e) => e.stopPropagation()}>
                             <div className="d-flex gap-2 justify-content-end">
                               <button
                                 className="btn btn-sm btn-outline-warning"
-                                onClick={() => handleEdit(trilha)}
+                                onClick={() => handleEditTrilha(trilha)}
                               >
                                 <i className="bi bi-pencil-square"></i>
                               </button>
                               <button
                                 className="btn btn-sm btn-outline-danger"
-                                onClick={() => handleDelete(trilha.id)}
+                                onClick={() => handleDeleteTrilha(trilha.id)}
                               >
                                 <i className="bi bi-trash"></i>
                               </button>
                             </div>
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {selectedTrilha && (
+        <div className="row">
+          <div className="col-12">
+            <div className="card shadow-sm border-0">
+              <div className="card-header bg-white py-3">
+                <h5 className="mb-0 fw-bold text-dark">
+                  Cursos na Trilha: <span className="text-primary">{selectedTrilha.titulo}</span>
+                </h5>
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleLinkCourse} className="row g-3 align-items-end mb-4">
+                  <div className="col-12 col-sm-6">
+                    <label className="form-label small fw-semibold">Selecionar Curso</label>
+                    <select
+                      className="form-select form-select-sm"
+                      value={selectedCourseId}
+                      onChange={(e) => setSelectedCourseId(e.target.value)}
+                      required
+                    >
+                      <option value="">Selecione o curso para adicionar...</option>
+                      {courses.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.titulo}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-6 col-sm-3">
+                    <label className="form-label small fw-semibold">Ordem na Trilha</label>
+                    <input
+                      type="number"
+                      className="form-control form-control-sm"
+                      value={tcOrdem}
+                      onChange={(e) => setTcOrdem(Number(e.target.value))}
+                      min={1}
+                      required
+                    />
+                  </div>
+                  <div className="col-6 col-sm-3">
+                    <button type="submit" className="btn btn-sm btn-success w-100">
+                      Adicionar Curso
+                    </button>
+                  </div>
+                </form>
+
+                <div className="bg-light p-3 rounded">
+                  <h6 className="fw-bold mb-3">Caminho de Aprendizado Sequencial</h6>
+                  {trilhaCursos.length === 0 ? (
+                    <div className="text-muted small py-2">
+                      Nenhum curso adicionado nesta trilha ainda.
+                    </div>
+                  ) : (
+                    <div className="list-group">
+                      {trilhaCursos.map((tc, idx) => (
+                        <div
+                          key={tc.id}
+                          className="list-group-item d-flex justify-content-between align-items-center bg-white rounded border mb-2 shadow-sm"
+                        >
+                          <div>
+                            <span className="badge bg-primary rounded-circle me-2 p-2" style={{ width: "30px", height: "30px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                              {idx + 1}
+                            </span>
+                            <span className="fw-semibold text-dark">{getCourseName(tc.idCurso)}</span>
+                            <small className="text-muted ms-2">(Ordem de Exibição: {tc.ordem})</small>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => handleUnlinkCourse(tc.id)}
+                          >
+                            Remover
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+export default TrilhasPage;

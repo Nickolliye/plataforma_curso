@@ -6,7 +6,7 @@ interface InputProps {
     value: string;  
     placeholder?: string;
     disabled?: boolean;
-    error?: string; // Nova prop
+    error?: string;
     onChange: (value: string) => void;
 }
 

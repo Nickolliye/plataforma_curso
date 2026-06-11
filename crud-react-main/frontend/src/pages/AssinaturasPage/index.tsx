@@ -25,7 +25,6 @@ export const AssinaturasPage = () => {
   const [assinaturas, setAssinaturas] = useState<IAssinatura[]>([]);
   const [receipt, setReceipt] = useState<IAssinatura | null>(null);
 
-  // Carregar usuários e assinaturas
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
